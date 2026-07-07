@@ -1,0 +1,7 @@
+# Sample corpus the spine can be searched against. In a real head this is
+# replaced by the person's actual body of work (their GitHub, their Discord
+# export, their docs). This file is illustrative only.
+- beamline Discord export (this repo's data/public/content/*.json)
+- DefenderOfBasic GitHub org
+- ORI community archive
+- local notes / markdown

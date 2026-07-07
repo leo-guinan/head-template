@@ -1,0 +1,71 @@
+{
+  "schema_version": "1.0",
+  "id": "TEMPLATE",
+  "name": "Example Head",
+  "aliases": [],
+  "headshot": "assets/headshot.svg",
+  "bio": "A placeholder mind-node. Clone this template per person; edit head.json, drop in a real headshot, point corpus at their searchable body of work.",
+  "corpus": [
+    {
+      "name": "Example Corpus Node",
+      "url": "https://github.com/leo-guinan/head-template",
+      "type": "github",
+      "search": "https://github.com/search?q=repo%3Aleo-guinan%2Fhead-template+{q}&type=code"
+    }
+  ],
+  "spine": {
+    "resolutions": [
+      {
+        "name": "project",
+        "grain": "coarse"
+      },
+      {
+        "name": "topic",
+        "grain": "medium"
+      },
+      {
+        "name": "idea",
+        "grain": "fine"
+      },
+      {
+        "name": "claim",
+        "grain": "atom"
+      }
+    ],
+    "connections": [
+      {
+        "label": "project: Example Corpus Node",
+        "resolution": "project",
+        "target": "https://github.com/leo-guinan/head-template",
+        "evidence": [
+          "https://github.com/search?q=repo%3Aleo-guinan%2Fhead-template+project&type=code"
+        ]
+      },
+      {
+        "label": "topic: Example Corpus Node",
+        "resolution": "topic",
+        "target": "https://github.com/leo-guinan/head-template",
+        "evidence": [
+          "https://github.com/search?q=repo%3Aleo-guinan%2Fhead-template+topic&type=code"
+        ]
+      },
+      {
+        "label": "idea: Example Corpus Node",
+        "resolution": "idea",
+        "target": "https://github.com/leo-guinan/head-template",
+        "evidence": [
+          "https://github.com/search?q=repo%3Aleo-guinan%2Fhead-template+idea&type=code"
+        ]
+      },
+      {
+        "label": "claim: Example Corpus Node",
+        "resolution": "claim",
+        "target": "https://github.com/leo-guinan/head-template",
+        "evidence": [
+          "https://github.com/search?q=repo%3Aleo-guinan%2Fhead-template+claim&type=code"
+        ]
+      }
+    ]
+  },
+  "last_built": "2026-07-07T16:37:55.792601+00:00"
+}

@@ -1,0 +1,86 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "head.json — a 'head' (mind-node)",
+  "description": "Pointer to a person's searchable corpus (the 'body' of work) and the connection manifest (the 'spine') built by searching that corpus at multiple resolutions.",
+  "type": "object",
+  "required": ["schema_version", "id", "name", "headshot", "corpus", "spine"],
+  "properties": {
+    "schema_version": {"type": "string", "const": "1.0"},
+    "id": {
+      "type": "string",
+      "description": "Stable slug for this head, e.g. 'defender'."
+    },
+    "name": {"type": "string", "description": "Display name / pseudonym."},
+    "aliases": {
+      "type": "array",
+      "items": {"type": "string"},
+      "description": "Other identities that resolve to this same head (e.g. Omar / Defender)."
+    },
+    "headshot": {
+      "type": "string",
+      "description": "Path or URL to the head photo. Commit a local file under assets/ for portability."
+    },
+    "bio": {"type": "string", "description": "One or two sentences."},
+    "corpus": {
+      "type": "array",
+      "description": "The searchable 'body' of work. Each entry is a link to a corpus node plus how it is searched.",
+      "items": {
+        "type": "object",
+        "required": ["name", "url", "search"],
+        "properties": {
+          "name": {"type": "string"},
+          "url": {"type": "string", "format": "uri"},
+          "type": {
+            "type": "string",
+            "enum": ["github", "discord-export", "docs", "site", "supabase", "rss", "other"],
+            "description": "What kind of corpus node this is."
+          },
+          "search": {
+            "type": "string",
+            "description": "How to search it: a URL template with {q}, a CLI, or 'manual'."
+          }
+        }
+      }
+    },
+    "spine": {
+      "type": "object",
+      "description": "Connection manifest: things attached to this mind at various resolutions, derived from searching the corpus.",
+      "required": ["resolutions", "connections"],
+      "properties": {
+        "resolutions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["name", "grain"],
+            "properties": {
+              "name": {"type": "string", "description": "e.g. 'project', 'topic', 'idea', 'claim'."},
+              "grain": {
+                "type": "string",
+                "description": "Coarse (whole corpus) -> fine (single claim). One of coarse|medium|fine|atom."
+              }
+            }
+          }
+        },
+        "connections": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["label", "resolution", "target", "evidence"],
+            "properties": {
+              "label": {"type": "string", "description": "What the connection is."},
+              "resolution": {"type": "string", "description": "Which resolution tier it lives at (must match a resolutions[].name)."},
+              "target": {"type": "string", "description": "What it connects to (another head id, a project, a concept)."},
+              "evidence": {
+                "type": "array",
+                "items": {"type": "string"},
+                "description": "Search strings / corpus links that justify the connection."
+              },
+              "weight": {"type": "number", "description": "Optional conviction 0..1."}
+            }
+          }
+        }
+      }
+    },
+    "last_built": {"type": "string", "format": "date-time"}
+  }
+}
