@@ -123,3 +123,13 @@ def write_spine(head_path: str | Path, seed_queries: list[str] | None = None) ->
     head_path.write_text(json.dumps(data, indent=2, ensure_ascii=False)
                          + "\n", encoding="utf-8")
     return head_path
+
+
+if __name__ == "__main__":
+    import argparse
+    ap = argparse.ArgumentParser(description="Build a head's spine.")
+    ap.add_argument("head", nargs="?", default="head.json")
+    ap.add_argument("--seed", nargs="*", default=None)
+    args = ap.parse_args()
+    write_spine(args.head, args.seed)
+    print(f"spine written: {args.head}")
