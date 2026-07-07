@@ -79,11 +79,17 @@ def probe_corpus(node: dict, query: str) -> dict:
     Returns a connection-style dict with evidence links so the spine is
     navigable even before live search is wired.
     """
-    url = expand_search(node.get("search", node["url"]), query)
+    # Resolve a target URL: bodies may carry url, dump.url, or extension.base.
+    target = (node.get("url")
+              or (node.get("dump") or {}).get("url")
+              or (node.get("extension") or {}).get("base")
+              or node.get("label", node.get("name", "?")))
+    search_tpl = node.get("search") or target
+    url = expand_search(search_tpl, query)
     return {
-        "label": f"{query} @ {node['name']}",
+        "label": f"{query} @ {node.get('name', node.get('label', '?'))}",
         "resolution": query,  # replaced by caller per-resolution
-        "target": node["url"],
+        "target": target,
         "evidence": [url],
     }
 
@@ -99,13 +105,17 @@ def build_spine(head_path: str | Path, seed_queries: list[str] | None = None
     seed_queries = seed_queries or [r["name"] for r in data["spine"]["resolutions"]]
     connections: list[dict] = list(data["spine"].get("connections", []))
 
-    # Seed one evidence-backed connection per (resolution x corpus node).
+    # A body is a set of connected bodies. Prefer `bodies` (the connected set);
+    # fall back to `corpus` for heads that only declare corpus nodes.
+    nodes = data.get("bodies") or data.get("corpus") or []
     for res in data["spine"]["resolutions"]:
-        for node in data["corpus"]:
+        for node in nodes:
             q = res["name"]
             probe = probe_corpus(node, q)
             probe["resolution"] = res["name"]
-            probe["label"] = f"{res['name']}: {node['name']}"
+            probe["label"] = f"{res['name']}: {node.get('label', node.get('name', '?'))}"
+            if "id" in node:
+                probe["body"] = node["id"]
             # Avoid duplicate (label, target) seeding.
             if not any(c.get("label") == probe["label"]
                        and c.get("target") == probe["target"]

@@ -185,6 +185,16 @@ def write_body(body_dir: Path, *, id_: str, name: str, source_kind: str,
         "aliases": [],
         "headshot": "",
         "bio": f"Searchable body of work for {name}. Feeds the {id_}-head spine.",
+        "bodies": [
+            {
+                "id": f"{id_}-source",
+                "kind": source_kind if source_kind in ("github", "supabase", "docs", "site", "rss", "other") else "other",
+                "label": f"source ({source_kind})",
+                "url": source_ref,
+                "mode": "dump" if source_kind in ("twitter-archive", "local") else "live",
+                "search": "manual" if source_kind in ("twitter-archive", "local", "gravatar") else f"{source_ref}/search?q={{q}}",
+            }
+        ],
         "corpus": [
             {
                 "name": f"source ({source_kind})",
